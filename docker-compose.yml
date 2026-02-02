@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+    environment:
+      # Переменные окружения для Django (можно хранить в .env)
+      SECRET_KEY: supersecretkey123456789
+      JWT_SECRET: jwt_secret_key_987654321
+      DEBUG: "True"
+      ALLOWED_HOSTS: localhost,127.0.0.1
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+
+volumes:
+  pgdata:
