@@ -1,5 +1,5 @@
-# Базовый образ Python (допустим Python 3.13)
-FROM python:3.13-slim
+# Базовый образ Python
+FROM python:3.12-slim
 
 # Устанавливаем рабочий каталог внутри контейнера
 WORKDIR /app
@@ -14,5 +14,6 @@ RUN pip install --upgrade pip && \
 # Открываем порт, который Django слушает по умолчанию
 EXPOSE 8000
 
-# Запускаем сервер Django
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Команда для запуска миграций и запуска сервера
+CMD ["sh", "-c", "python manage.py migrate --no-input && python manage.py loaddata project/fixtures/roles.json project/fixtures/business_elements.json project/fixtures/access_rules.json && python manage.py runserver 0.0.0.0:8000"]
+

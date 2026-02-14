@@ -5,9 +5,9 @@ services:
     image: postgres:15-alpine
     restart: always
     environment:
-      POSTGRES_DB: auth_db
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${DB_NAME:-auth_db}
+      POSTGRES_USER: ${DB_USER:-user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
     ports:
       - "5432:5432"
     volumes:
@@ -15,19 +15,23 @@ services:
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
     depends_on:
       - db
     environment:
-      # Переменные окружения для Django (можно хранить в .env)
-      SECRET_KEY: supersecretkey123456789
-      JWT_SECRET: jwt_secret_key_987654321
-      DEBUG: "True"
-      ALLOWED_HOSTS: localhost,127.0.0.1
+      SECRET_KEY: ${SECRET_KEY}
+      JWT_SECRET: ${JWT_SECRET}
+      DEBUG: ${DEBUG:-False}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
+      DB_NAME: ${DB_NAME:-auth_db}
+      DB_USER: ${DB_USER:-user}
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_HOST: db
+      DB_PORT: 5432
     ports:
       - "8000:8000"
-    volumes:
-      - .:/app
+    # Убрали volume для production окружения
+    # volumes:
+    #   - .:/app
 
 volumes:
   pgdata:

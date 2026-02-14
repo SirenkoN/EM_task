@@ -1,3 +1,5 @@
+"""URL-маршруты для бизнес-логики."""
+
 from django.urls import path
 from .views import ProductListView, OrderListView, UserListView
 

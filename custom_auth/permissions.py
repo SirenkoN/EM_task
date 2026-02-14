@@ -9,7 +9,27 @@ class AccessPermission(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        # Если не авторизован – DRF вернёт 401 автоматически
+        """Проверяет разрешение пользователя на выполнение действия над бизнес-элементом.
+
+        Выполняет последовательную проверку:
+        1. Активен ли пользователь
+        2. Указаны ли required_permission и element_id в представлении
+        3. Является ли пользователь администратором (автоматически получает все права)
+        4. Наличие роли у пользователя
+        5. Проверка конкретного правила доступа из БД в зависимости от required_permission
+
+        Args:
+            request: HTTP-запрос с аутентификационными данными
+            view: Представление, для которого проверяется доступ
+
+        Returns:
+            bool: True если доступ разрешен, False в противном случае
+
+        Побочные эффекты:
+            - Для администраторов всегда возвращает True
+            - При отсутствии element_id или required_permission возвращает True
+            - Для неактивных пользователей всегда возвращает False
+        """
         if not request.user or not request.user.is_active:
             return False
 
@@ -20,7 +40,15 @@ class AccessPermission(permissions.BasePermission):
         if not required or not element_id:
             return True
 
-        from auth.models import AccessRule
+        # Проверка для администратора - имеет все права
+        if request.user.role and hasattr(request.user.role, 'name') and request.user.role.name == "Admin":
+            return True
+
+        # Проверяем, есть ли у пользователя роль
+        if not request.user.role:
+            return False
+
+        from custom_auth.models import AccessRule
         try:
             rule = AccessRule.objects.get(
                 role=request.user.role,
@@ -40,3 +68,5 @@ class AccessPermission(permissions.BasePermission):
             return rule.delete_permission or rule.delete_all_permission
 
         return False  # неизвестное действие -> отказ
+
+

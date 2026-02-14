@@ -1,61 +1,21 @@
-# Бинарные файлы и артефакты сборки
-__pycache__
-*.pyc
-*.pyo
-*.pyd
-
 # Виртуальное окружение
 venv/
 env/
 .venv/
 
 # Скомпилированные файлы Python
-*.so
-*.dll
-*.dylib
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-# Логи и дампы
-*.log
-*.dump
-
-# Файлы конфигурации, которые не должны попадать в репозиторий
+# Файлы окружения
 .env
-.env.example
+.env.*
 
-# Базы данных (SQLite) – можно оставить, если хотите хранить локально
-db.sqlite3
-
-# Django миграции и фикстуры
-migrations/
-
-# Внутренние каталоги проекта
-project/__pycache__/
-custom_auth/__pycache__/
-business/__pycache__/
-
-# Системные файлы
+# Локальные файлы
 .DS_Store
 Thumbs.db
 
-# VS Code settings
-.vscode/
-*.code-workspace
-
-# PyCharm
-.idea/
-
-# Pytest cache
-.cache/
-
-# Расширения и пакеты, которые не нужны в репозитории
-site-packages/
-
-# Данные, которые могут быть чувствительными (пароли, токены)
-SECRET_KEY*
-JWT_SECRET*
-
-# Любые файлы с расширением .tmp
-*.tmp
-
-# Логи отладки
-debug.log
+# Логи
+*.log

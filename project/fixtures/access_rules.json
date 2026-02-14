@@ -11,6 +11,28 @@
         "delete_all_permission": true
     },
     {
+        "role_id": 1,
+        "element_id": 2,
+        "read_permission": true,
+        "read_all_permission": true,
+        "create_permission": true,
+        "update_permission": true,
+        "update_all_permission": true,
+        "delete_permission": true,
+        "delete_all_permission": true
+    },
+    {
+        "role_id": 1,
+        "element_id": 3,
+        "read_permission": true,
+        "read_all_permission": true,
+        "create_permission": true,
+        "update_permission": true,
+        "update_all_permission": true,
+        "delete_permission": true,
+        "delete_all_permission": true
+    },
+    {
         "role_id": 2,
         "element_id": 2,
         "read_permission": true,

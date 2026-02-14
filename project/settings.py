@@ -12,6 +12,11 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 # --------------------------------------------------------------------
+# Добавляем JWT_SECRET (критически важно!)
+# --------------------------------------------------------------------
+JWT_SECRET = os.getenv('JWT_SECRET', 'fallback_jwt_secret')
+
+# --------------------------------------------------------------------
 # База данных PostgreSQL (параметры берутся из переменных окружения)
 # --------------------------------------------------------------------
 DATABASES = {
@@ -31,6 +36,7 @@ DATABASES = {
 INSTALLED_APPS = [
     # Django core apps
     'django.contrib.admin',
+    'custom_auth',                    # наше приложение должно быть перед auth
     'django.contrib.auth',            # встроенное приложение для auth_user_model
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -42,7 +48,6 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # Наши приложения – обновлённый путь
-    'custom_auth',
     'business',
 ]
 
@@ -98,7 +103,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'custom_auth.authentication.JWTAuthentication',
     ),
-    # По умолчанию требуем авторизацию (401 если не логин)
+    # По умолчанию требуем аутентификацию (но не авторизацию)
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
@@ -118,3 +123,4 @@ STATIC_URL = '/static/'
 # Переопределяем модель пользователя
 # --------------------------------------------------------------------
 AUTH_USER_MODEL = 'custom_auth.User'
+
